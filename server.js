@@ -34,7 +34,7 @@ app.get('/', function(req, res) {
     Eagle.find({}, function(err, eagles) {
         if(err) {
             console.log('something went wrong with index find');
-            res.render('index');
+            res.redirect('/');
           } else { // else console.log that we did well and then redirect to the root route
             console.log('success Eagles at index!');
             res.render('index', {eagles: eagles});
@@ -44,12 +44,10 @@ app.get('/', function(req, res) {
 //Show one Eagle
 app.get('/eagles/:id', function(req, res) {
     // This is where we will retrieve the eagle from the database and include them in the view page we will be rendering.
-    console.log("in show", req.params.id);
     Eagle.findOne({_id: req.params.id}, function(err, eagle) {
-        console.log(eagle);
         if(err) {
             console.log('something went wrong with show one find');
-            res.render('index');
+            res.redirect('/');
         } else { // else console.log that we did well and then redirect to the root route
             console.log('successfully pulled One Eagle!');
             res.render('eagles/eagles', {eagle: eagle});
@@ -62,10 +60,8 @@ app.get('/new', function(req, res) {
 });
 // Add Eagle to the DB 
 app.post('/eagles', function(req, res) {
-    console.log("POST DATA add", req.body);
     // create a new Eagle with the name corresponding to those from req.body
     var eagle = new Eagle(req.body);
-    console.log("new eagle", eagle);
     // Try to save that new eagle to the database (this is the method that actually inserts into the db) and run a callback function with an error (if any) from the operation.
     eagle.save(function(err) {
       // if there is an error console.log that something went wrong!
@@ -73,16 +69,14 @@ app.post('/eagles', function(req, res) {
         console.log('something went wrong with new eagle save');
       } else { // else console.log that we did well and then redirect to the root route
         console.log('successfully added an Eagle!');
-        res.redirect('/');
       };
+      res.redirect('/');
     });
 });
 //Edit an Eagle
 app.get('/edit/:id', function(req, res) {
     // This is where we will retrieve the eagle from the database and include them in the view page we will be rendering.
-    console.log("EDIT ID", req.params.id);
     Eagle.findOne({_id: req.params.id}, function(err, eagle) {
-        console.log("EDIT eagle:", eagle);
         if(err) {
             console.log('something went wrong with the find EDIT');
             res.redirect('/');
@@ -94,32 +88,28 @@ app.get('/edit/:id', function(req, res) {
 });
 // Update An Eagle in the DB 
 app.post('/:id', function(req, res) {
-    console.log("POST DATA Update", req.body);
-    console.log(req.params.id);
     var id = req.params.id;
     Eagle.update({_id: id}, {name: req.body.name}, function(err){
         // if there is an error console.log that something went wrong!
         if(err) {
             console.log('something went wrong with UPDATE');
-            res.render('index');
+            res.redirect('/');
         } else { // else console.log that we did well and then redirect to the root route
             console.log('successfully updated an Eagle!');
-            const query = ('/eagles/' + req.params.id);
-            console.log("This is my query", query);
+            const query = ('/eagles/' + id);
             res.redirect(query);
         };
     });
 });
 //Destroy an Eagle --- So SAD!
 app.post('/destroy/:id', function(req, res) {
-    console.log(req.params.id);
     Eagle.remove({_id: req.params.id }, function(err) {
       if(err) {
         console.log('something went wrong with save');
       } else { // else console.log that we did well and then redirect to the root route
         console.log('successfully destroyed an Eagle!');
-        res.redirect('/');
       };
+      res.redirect('/');
     });
 });
  
