@@ -27,6 +27,7 @@ var EagleSchema = new mongoose.Schema({
     var Eagle = mongoose.model('Eagle'); // We are retrieving this Schema from our Models, named 'Eagle'
     // Use native promises
     mongoose.Promise = global.Promise;
+    
 // Routes
 // Root Request - Show ALL Eagles
 app.get('/', function(req, res) {
@@ -113,7 +114,7 @@ app.post('/destroy/:id', function(req, res) {
     });
 });
  
-// Setting our Server to Listen on Port: 8000
+// Setting our Server to Listen on Port: 8004
 app.listen(8004, function() {
     console.log("listening on port 8004");
 });
